@@ -316,11 +316,11 @@ $menus = \App\Models\Menu::all();
 <section class="location" id="visit">
 <div class="container">
 <h2>Visit Us</h2>
-<p>Jl. Coffee Street No. 88, Bandung</p>
+<p>Jl. maribaya No. 88, Lembang</p>
 
 <div class="map-wrapper">
 <iframe 
-src="https://www.google.com/maps?q=Bandung&output=embed"
+src="https://www.google.com/maps?q=Lembang&output=embed"
 allowfullscreen=""
 loading="lazy">
 </iframe>
@@ -328,7 +328,7 @@ loading="lazy">
 
 <br>
 
-<a href="https://www.google.com/maps/search/?api=1&query=Bandung" 
+<a href="https://www.google.com/maps/search/?api=1&query=Lembang" 
 target="_blank" 
 class="btn">
 Open in Google Maps

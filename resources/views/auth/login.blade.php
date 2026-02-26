@@ -79,7 +79,7 @@ backdrop-filter:blur(10px);
 
 .login-box h2{
 font-family:'Playfair Display',serif;
-margin-bottom:30px;
+margin-bottom:20px;
 text-align:center;
 }
 
@@ -119,6 +119,22 @@ color:#D4A373;
 text-decoration:none;
 }
 
+/* ERROR BOX */
+.error-box{
+background:#5c1f1f;
+padding:12px;
+border-radius:10px;
+margin-bottom:20px;
+font-size:13px;
+}
+.error-box ul{
+list-style:none;
+padding-left:0;
+}
+.error-box li{
+margin-bottom:5px;
+}
+
 </style>
 </head>
 <body>
@@ -136,10 +152,21 @@ text-decoration:none;
 <div class="login-box">
 <h2>Login</h2>
 
+{{-- ERROR MESSAGE --}}
+@if ($errors->any())
+<div class="error-box">
+<ul>
+@foreach ($errors->all() as $error)
+<li>• {{ $error }}</li>
+@endforeach
+</ul>
+</div>
+@endif
+
 <form method="POST" action="{{ route('login') }}">
 @csrf
 
-<input type="email" name="email" placeholder="Email" required>
+<input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
 <input type="password" name="password" placeholder="Password" required>
 
 <button type="submit">Login</button>

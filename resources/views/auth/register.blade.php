@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -120,6 +119,28 @@ color:#D4A373;
 text-decoration:none;
 }
 
+/* ERROR BOX */
+.error-box{
+background:#5c1f1f;
+padding:12px;
+border-radius:10px;
+margin-bottom:20px;
+font-size:13px;
+}
+.error-box ul{
+list-style:none;
+}
+.error-box li{
+margin-bottom:5px;
+}
+
+.password-info{
+display:block;
+margin-top:-15px;
+margin-bottom:15px;
+color:#aaa;
+font-size:12px;
+}
 </style>
 </head>
 <body>
@@ -140,9 +161,24 @@ text-decoration:none;
 <form method="POST" action="{{ route('register') }}">
 @csrf
 
-<input type="text" name="name" placeholder="Full Name" required>
-<input type="email" name="email" placeholder="Email" required>
+@if ($errors->any())
+<div class="error-box">
+<ul>
+@foreach ($errors->all() as $error)
+<li>• {{ $error }}</li>
+@endforeach
+</ul>
+</div>
+@endif
+
+<input type="text" name="name" placeholder="Full Name" required value="{{ old('name') }}">
+<input type="email" name="email" placeholder="Email" required value="{{ old('email') }}">
+
 <input type="password" name="password" placeholder="Password" required>
+<small class="password-info">
+Password minimal 8 karakter dan harus mengandung huruf & angka.
+</small>
+
 <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
 
 <button type="submit">Create Account</button>
