@@ -28,7 +28,7 @@ max-width:1200px;
 margin:auto;
 }
 
-/* ================= NAVBAR ================= */
+/* NAVBAR */
 .navbar{
 position:fixed;
 width:100%;
@@ -61,25 +61,9 @@ color:#fff;
 text-decoration:none;
 margin-left:30px;
 font-size:14px;
-position:relative;
 }
 
-.nav-links a::after{
-content:"";
-position:absolute;
-left:0;
-bottom:-5px;
-width:0%;
-height:2px;
-background:#D4A373;
-transition:.4s;
-}
-
-.nav-links a:hover::after{
-width:100%;
-}
-
-/* ================= ADMIN SECTION ================= */
+/* ADMIN */
 .admin-section{
 padding:160px 0 100px 0;
 }
@@ -113,7 +97,7 @@ background:#D4A373;
 transform:translateY(-3px);
 }
 
-/* ================= TABLE ================= */
+/* TABLE */
 .table-wrapper{
 background:rgba(255,255,255,0.05);
 padding:40px;
@@ -135,10 +119,19 @@ font-weight:500;
 td{
 padding:18px 15px;
 border-bottom:1px solid rgba(255,255,255,0.1);
+vertical-align:middle;
 }
 
 tr:hover{
 background:rgba(255,255,255,0.05);
+}
+
+.menu-img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.4);
 }
 
 .action-btn{
@@ -168,7 +161,6 @@ background:#8b0000;
 </head>
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
 <div class="container nav-wrapper">
 <div class="logo">KURO <span>KOPISTHETIC</span></div>
@@ -187,7 +179,6 @@ Logout
 </div>
 </div>
 
-<!-- ADMIN CONTENT -->
 <section class="admin-section">
 <div class="container">
 
@@ -204,6 +195,7 @@ Logout
 <thead>
 <tr>
 <th style="width:60px;">#</th>
+<th style="width:100px;">Foto</th>
 <th>Nama Menu</th>
 <th style="width:180px;">Harga</th>
 <th style="width:200px;">Aksi</th>
@@ -214,8 +206,19 @@ Logout
 @forelse($menus as $menu)
 <tr>
 <td>{{ $loop->iteration }}</td>
+
+<td>
+@if($menu->foto)
+<img src="{{ asset('uploads/'.$menu->foto) }}" class="menu-img">
+@else
+<span style="color:#777;">No Image</span>
+@endif
+</td>
+
 <td>{{ $menu->name }}</td>
+
 <td>Rp {{ number_format($menu->price, 0, ',', '.') }}</td>
+
 <td>
 <a href="{{ route('menu.edit',$menu->id) }}" class="action-btn edit-btn">
 Edit
@@ -236,7 +239,7 @@ Hapus
 </tr>
 @empty
 <tr>
-<td colspan="4" style="text-align:center;padding:40px;color:#aaa;">
+<td colspan="5" style="text-align:center;padding:40px;color:#aaa;">
 Belum ada menu yang ditambahkan.
 </td>
 </tr>

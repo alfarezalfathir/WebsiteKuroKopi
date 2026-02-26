@@ -32,10 +32,20 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'price' => 'required|numeric',
-            'description' => 'nullable'
+            'description' => 'nullable',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        Menu::create($request->only('name', 'price', 'description'));
+        $data = $request->only('name', 'price', 'description');
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            $data['foto'] = $filename;
+        }
+
+        Menu::create($data);
 
         return redirect()
                 ->route('menu.index')
@@ -58,10 +68,26 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'price' => 'required|numeric',
-            'description' => 'nullable'
+            'description' => 'nullable',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $menu->update($request->only('name', 'price', 'description'));
+        $data = $request->only('name', 'price', 'description');
+
+        if ($request->hasFile('foto')) {
+
+            // Hapus foto lama kalau ada
+            if ($menu->foto && file_exists(public_path('uploads/'.$menu->foto))) {
+                unlink(public_path('uploads/'.$menu->foto));
+            }
+
+            $file = $request->file('foto');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            $data['foto'] = $filename;
+        }
+
+        $menu->update($data);
 
         return redirect()
                 ->route('menu.index')
@@ -73,6 +99,11 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
+        // Hapus foto jika ada
+        if ($menu->foto && file_exists(public_path('uploads/'.$menu->foto))) {
+            unlink(public_path('uploads/'.$menu->foto));
+        }
+
         $menu->delete();
 
         return back()->with('success', 'Menu berhasil dihapus!');

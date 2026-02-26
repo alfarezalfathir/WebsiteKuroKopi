@@ -172,7 +172,9 @@ font-size:13px;
 </div>
 @endif
 
-<form action="{{ route('menu.update',$menu->id) }}" method="POST">
+<form action="{{ route('menu.update',$menu->id) }}" 
+      method="POST" 
+      enctype="multipart/form-data">
 @csrf
 @method('PUT')
 
@@ -192,6 +194,19 @@ name="price"
 value="{{ old('price', $menu->price) }}"
 class="form-input"
 required>
+
+@if($menu->foto)
+<div style="margin-bottom:20px;text-align:center;">
+<p style="color:#aaa;font-size:13px;margin-bottom:10px;">Foto Saat Ini:</p>
+<img src="{{ asset('uploads/'.$menu->foto) }}"
+style="width:150px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.5);">
+</div>
+@endif
+
+<input type="file"
+name="foto"
+class="form-input"
+style="padding:12px;border-radius:20px;">
 
 <button type="submit" class="submit-btn">
 Update Menu

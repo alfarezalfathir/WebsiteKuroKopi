@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ================= GLOBAL ================= */
 *{
 margin:0;
 padding:0;
@@ -42,7 +41,7 @@ opacity:1;
 transform:translateY(0);
 }
 
-/* ================= NAVBAR ================= */
+/* NAVBAR */
 .navbar{
 position:fixed;
 width:100%;
@@ -84,25 +83,9 @@ color:#fff;
 text-decoration:none;
 margin-left:30px;
 font-size:14px;
-position:relative;
 }
 
-.nav-links a::after{
-content:"";
-position:absolute;
-left:0;
-bottom:-5px;
-width:0%;
-height:2px;
-background:#D4A373;
-transition:.4s;
-}
-
-.nav-links a:hover::after{
-width:100%;
-}
-
-/* ================= HERO ================= */
+/* HERO */
 .hero{
 height:100vh;
 background:
@@ -142,7 +125,7 @@ background:#D4A373;
 transform:translateY(-3px);
 }
 
-/* ================= ABOUT ================= */
+/* ABOUT */
 .about{
 background:#F5EFE6;
 color:#111;
@@ -168,19 +151,17 @@ font-family:'Playfair Display',serif;
 }
 
 .menu-wrapper{
-display:flex;
-gap:30px;
-flex-wrap:wrap;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:35px;
 }
 
 .menu-card{
 background:rgba(255,255,255,0.05);
-padding:40px;
 border-radius:25px;
-flex:1;
-min-width:250px;
-text-align:center;
+overflow:hidden;
 transition:.4s;
+backdrop-filter:blur(8px);
 }
 
 .menu-card:hover{
@@ -188,14 +169,42 @@ transform:translateY(-10px);
 background:rgba(255,255,255,0.08);
 }
 
-.menu-card span{
-display:block;
-margin-top:10px;
-color:#D4A373;
-font-weight:500;
+.menu-img{
+width:100%;
+height:230px;
+object-fit:cover;
+transition:.4s;
 }
 
-/* ================= LOCATION ================= */
+.menu-card:hover .menu-img{
+transform:scale(1.05);
+}
+
+.menu-content{
+padding:25px;
+text-align:center;
+}
+
+.menu-content h3{
+margin-bottom:10px;
+font-size:20px;
+}
+
+.menu-content p{
+color:#ccc;
+font-size:14px;
+min-height:50px;
+}
+
+.menu-content span{
+display:block;
+margin-top:15px;
+color:#D4A373;
+font-weight:600;
+font-size:16px;
+}
+
+/* LOCATION */
 .location{
 text-align:center;
 background:#111;
@@ -213,7 +222,6 @@ height:400px;
 border:0;
 }
 
-/* ================= FOOTER ================= */
 footer{
 background:#000;
 padding:40px;
@@ -234,7 +242,6 @@ font-size:42px;
 </head>
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <div class="navbar" id="navbar">
 <div class="container nav-wrapper">
 <div class="logo">KURO <span>KOPISTHETIC</span></div>
@@ -246,23 +253,22 @@ font-size:42px;
 <a href="#visit">Visit</a>
 
 @auth
-    @if(auth()->user()->role === 'admin')
-        <a href="{{ route('menu.index') }}">Admin</a>
-    @endif
+@if(auth()->user()->role === 'admin')
+<a href="{{ route('menu.index') }}">Admin</a>
+@endif
 
-    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-        @csrf
-        <button class="btn" style="margin-left:20px;">Logout</button>
-    </form>
+<form action="{{ route('logout') }}" method="POST" style="display:inline;">
+@csrf
+<button class="btn" style="margin-left:20px;">Logout</button>
+</form>
 @else
-    <a href="{{ route('login') }}" class="btn" style="margin-left:20px;">Login</a>
+<a href="{{ route('login') }}" class="btn" style="margin-left:20px;">Login</a>
 @endauth
 
 </div>
 </div>
 </div>
 
-<!-- ================= HERO ================= -->
 <section class="hero" id="home">
 <div class="container">
 <h1>Where Coffee Meets Aesthetic</h1>
@@ -271,7 +277,6 @@ font-size:42px;
 </div>
 </section>
 
-<!-- ================= ABOUT ================= -->
 <section class="about" id="about">
 <div class="container about-wrapper">
 <div style="flex:1">
@@ -281,13 +286,12 @@ font-size:42px;
 <h2>About Kuro</h2>
 <p>
 Kuro Kopisthetic is a premium aesthetic coffee space inspired by Japanese minimalism and urban cafe culture.
-A place where bold espresso meets clean design and instagrammable atmosphere.
 </p>
 </div>
 </div>
 </section>
 
-<!-- ================= MENU DATABASE ================= -->
+<!-- MENU -->
 <section id="menu">
 <div class="container">
 <h2 class="menu-title">Signature Menu</h2>
@@ -300,9 +304,19 @@ $menus = \App\Models\Menu::all();
 
 @forelse($menus as $item)
 <div class="menu-card">
+
+@if($item->foto)
+<img src="{{ asset('uploads/'.$item->foto) }}" class="menu-img">
+@else
+<img src="https://via.placeholder.com/400x300?text=No+Image" class="menu-img">
+@endif
+
+<div class="menu-content">
 <h3>{{ $item->name }}</h3>
 <p>{{ $item->description }}</p>
-<span>Rp {{ number_format($item->price) }}</span>
+<span>Rp {{ number_format($item->price,0,',','.') }}</span>
+</div>
+
 </div>
 @empty
 <p style="text-align:center;">No menu available yet.</p>
@@ -312,18 +326,13 @@ $menus = \App\Models\Menu::all();
 </div>
 </section>
 
-<!-- ================= LOCATION ================= -->
 <section class="location" id="visit">
 <div class="container">
 <h2>Visit Us</h2>
 <p>Jl. maribaya No. 88, Lembang</p>
 
 <div class="map-wrapper">
-<iframe 
-src="https://www.google.com/maps?q=Lembang&output=embed"
-allowfullscreen=""
-loading="lazy">
-</iframe>
+<iframe src="https://www.google.com/maps?q=Lembang&output=embed"></iframe>
 </div>
 
 <br>

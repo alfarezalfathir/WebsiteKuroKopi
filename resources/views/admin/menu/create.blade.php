@@ -172,7 +172,7 @@ font-size:13px;
 </div>
 @endif
 
-<form action="{{ route('menu.store') }}" method="POST">
+<form action="{{ route('menu.store') }}" method="POST" enctype="multipart/form-data">
 @csrf
 
 <input type="text"
@@ -194,6 +194,12 @@ placeholder="Harga"
 class="form-input"
 value="{{ old('price') }}"
 required>
+
+<!-- INPUT FOTO -->
+<input type="file"
+name="foto"
+class="form-input"
+style="padding:12px;border-radius:20px;">
 
 <button type="submit" class="submit-btn">
 Simpan Menu
